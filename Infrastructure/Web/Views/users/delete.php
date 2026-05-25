@@ -1,43 +1,96 @@
-<div class="card shadow">
+<?php require_once __DIR__ . '/../layouts/header.php'; ?>
 
-    <div class="card-body">
+<div class="row justify-content-center">
 
-        <h3>
+    <div class="col-md-6">
 
-            Confirmar eliminación
+        <div class="card border-0 shadow">
 
-        </h3>
+            <div class="card-header bg-danger text-white">
 
-        <p>
+                <h3 class="mb-0">
 
-            ¿Desea eliminar a
+                    <i class="bi bi-trash"></i>
 
-            <strong>
+                    Confirmar Eliminación
 
-                <?= htmlspecialchars($user['name']) ?>
+                </h3>
 
-            </strong>
+            </div>
 
-            ?
+            <div class="card-body text-center">
 
-        </p>
+                <div class="mb-4">
 
-        <a
-            href="?action=delete&id=<?= $user['id'] ?>"
-            class="btn btn-danger">
+                    <i
+                        class="bi bi-exclamation-triangle-fill text-danger"
+                        style="font-size: 80px;">
+                    </i>
 
-            Sí, eliminar
+                </div>
 
-        </a>
+                <h4>
 
-        <a
-            href="index.php"
-            class="btn btn-secondary">
+                    ¿Desea eliminar este usuario?
 
-            Cancelar
+                </h4>
 
-        </a>
+                <hr>
+
+                <p>
+
+                    <strong>Nombre:</strong>
+
+                    <?= htmlspecialchars($user['name']) ?>
+
+                </p>
+
+                <p>
+
+                    <strong>Correo:</strong>
+
+                    <?= htmlspecialchars($user['email']) ?>
+
+                </p>
+
+                <p>
+
+                    <strong>Rol:</strong>
+
+                    <?= htmlspecialchars($user['role']) ?>
+
+                </p>
+
+                <div class="d-flex justify-content-center gap-2 mt-4">
+
+                    <a
+                        href="?action=delete&id=<?= $user['id'] ?>"
+                        class="btn btn-danger">
+
+                        <i class="bi bi-trash"></i>
+
+                        Sí, eliminar
+
+                    </a>
+
+                    <a
+                        href="index.php"
+                        class="btn btn-secondary">
+
+                        <i class="bi bi-x-circle"></i>
+
+                        Cancelar
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
 
     </div>
 
 </div>
+
+<?php require_once __DIR__ . '/../layouts/footer.php'; ?>
