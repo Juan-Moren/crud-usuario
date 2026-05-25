@@ -104,4 +104,38 @@ class UserRepository
             ':id' => $id
         ]);
     }
+
+    public function getStatistics(): array
+    {
+        return [
+
+            'total' => $this->db
+                ->query("SELECT COUNT(*) FROM users")
+                ->fetchColumn(),
+
+            'active' => $this->db
+                ->query("
+                SELECT COUNT(*)
+                FROM users
+                WHERE status='ACTIVE'
+            ")
+                ->fetchColumn(),
+
+            'inactive' => $this->db
+                ->query("
+                SELECT COUNT(*)
+                FROM users
+                WHERE status='INACTIVE'
+            ")
+                ->fetchColumn(),
+
+            'admins' => $this->db
+                ->query("
+                SELECT COUNT(*)
+                FROM users
+                WHERE role='ADMIN'
+            ")
+                ->fetchColumn()
+        ];
+    }
 }

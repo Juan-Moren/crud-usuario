@@ -18,6 +18,10 @@ class UserController
     {
         $users = $this->repository->getAll();
 
+        $stats =
+            $this->repository
+            ->getStatistics();
+
         require __DIR__ .
             '/../Views/index.php';
     }
