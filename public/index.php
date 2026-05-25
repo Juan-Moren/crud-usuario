@@ -24,6 +24,12 @@ switch ($action) {
         $controller->update();
         break;
 
+    case 'confirm-delete':
+        $controller->confirmDelete(
+            (int) $_GET['id']
+        );
+        break;
+
     case 'delete':
         $controller->delete(
             (int) $_GET['id']

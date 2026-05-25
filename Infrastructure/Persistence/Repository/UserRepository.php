@@ -56,6 +56,31 @@ class UserRepository
         return $stmt->fetchAll();
     }
 
+    public function search(string $term = ''): array
+    {
+        if (empty($term)) {
+            return $this->getAll();
+        }
+
+        $sql = "
+            SELECT *
+            FROM users
+            WHERE
+                name LIKE :term
+                OR email LIKE :term
+                OR role LIKE :term
+            ORDER BY id DESC
+        ";
+
+        $stmt = $this->db->prepare($sql);
+
+        $stmt->execute([
+            ':term' => "%{$term}%"
+        ]);
+
+        return $stmt->fetchAll();
+    }
+
     public function findById(int $id): ?array
     {
         $stmt = $this->db->prepare(
@@ -74,14 +99,14 @@ class UserRepository
     public function update(User $user): bool
     {
         $sql = "
-        UPDATE users
-        SET
-            name = :name,
-            email = :email,
-            role = :role,
-            status = :status
-        WHERE id = :id
-    ";
+            UPDATE users
+            SET
+                name = :name,
+                email = :email,
+                role = :role,
+                status = :status
+            WHERE id = :id
+        ";
 
         $stmt = $this->db->prepare($sql);
 
@@ -115,26 +140,26 @@ class UserRepository
 
             'active' => $this->db
                 ->query("
-                SELECT COUNT(*)
-                FROM users
-                WHERE status='ACTIVE'
-            ")
+                    SELECT COUNT(*)
+                    FROM users
+                    WHERE status='ACTIVE'
+                ")
                 ->fetchColumn(),
 
             'inactive' => $this->db
                 ->query("
-                SELECT COUNT(*)
-                FROM users
-                WHERE status='INACTIVE'
-            ")
+                    SELECT COUNT(*)
+                    FROM users
+                    WHERE status='INACTIVE'
+                ")
                 ->fetchColumn(),
 
             'admins' => $this->db
                 ->query("
-                SELECT COUNT(*)
-                FROM users
-                WHERE role='ADMIN'
-            ")
+                    SELECT COUNT(*)
+                    FROM users
+                    WHERE role='ADMIN'
+                ")
                 ->fetchColumn()
         ];
     }

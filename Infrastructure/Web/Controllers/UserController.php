@@ -16,22 +16,21 @@ class UserController
 
     public function index()
     {
-        $users = $this->repository->getAll();
+        $search = $_GET['search'] ?? '';
 
-        $stats =
-            $this->repository
-            ->getStatistics();
+        $users = $this->repository->search($search);
 
-        require __DIR__ .
-            '/../Views/index.php';
+        $stats = $this->repository->getStatistics();
+
+        require __DIR__ . '/../Views/dashboard.php';
     }
 
     public function store()
     {
         $user = new User(
             null,
-            $_POST['name'],
-            $_POST['email'],
+            trim($_POST['name']),
+            trim($_POST['email']),
             password_hash(
                 $_POST['password'],
                 PASSWORD_DEFAULT
@@ -41,7 +40,7 @@ class UserController
 
         $this->repository->create($user);
 
-        header("Location: index.php");
+        header("Location: index.php?success=create");
         exit;
     }
 
@@ -49,15 +48,15 @@ class UserController
     {
         $user = $this->repository->findById($id);
 
-        require __DIR__ . '/../Views/edit.php';
+        require __DIR__ . '/../Views/users/edit.php';
     }
 
     public function update()
     {
         $user = new User(
             (int) $_POST['id'],
-            $_POST['name'],
-            $_POST['email'],
+            trim($_POST['name']),
+            trim($_POST['email']),
             '',
             $_POST['role'],
             $_POST['status']
@@ -65,15 +64,22 @@ class UserController
 
         $this->repository->update($user);
 
-        header("Location: index.php");
+        header("Location: index.php?success=update");
         exit;
+    }
+
+    public function confirmDelete(int $id)
+    {
+        $user = $this->repository->findById($id);
+
+        require __DIR__ . '/../Views/users/delete.php';
     }
 
     public function delete(int $id)
     {
         $this->repository->delete($id);
 
-        header("Location: index.php");
+        header("Location: index.php?success=delete");
         exit;
     }
 }
