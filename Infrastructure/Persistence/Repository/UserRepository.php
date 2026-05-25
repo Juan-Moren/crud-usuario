@@ -55,4 +55,53 @@ class UserRepository
 
         return $stmt->fetchAll();
     }
+
+    public function findById(int $id): ?array
+    {
+        $stmt = $this->db->prepare(
+            "SELECT * FROM users WHERE id = :id"
+        );
+
+        $stmt->execute([
+            ':id' => $id
+        ]);
+
+        $user = $stmt->fetch();
+
+        return $user ?: null;
+    }
+
+    public function update(User $user): bool
+    {
+        $sql = "
+        UPDATE users
+        SET
+            name = :name,
+            email = :email,
+            role = :role,
+            status = :status
+        WHERE id = :id
+    ";
+
+        $stmt = $this->db->prepare($sql);
+
+        return $stmt->execute([
+            ':id' => $user->getId(),
+            ':name' => $user->getName(),
+            ':email' => $user->getEmail(),
+            ':role' => $user->getRole(),
+            ':status' => $user->getStatus()
+        ]);
+    }
+
+    public function delete(int $id): bool
+    {
+        $stmt = $this->db->prepare(
+            "DELETE FROM users WHERE id = :id"
+        );
+
+        return $stmt->execute([
+            ':id' => $id
+        ]);
+    }
 }
